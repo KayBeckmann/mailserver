@@ -8,12 +8,13 @@ services:
     volumes:
       - maildata:/mail
       - ./dovecot/conf:/etc/dovecot:ro
-      - ${CERTS_HOST_PATH}:/certs:ro
+      - ${CERTS_HOST_PATH}:/certs
     environment:
       - TZ=${TZ}
       - FQDN=${FQDN}
       - MAIL_UID=${MAIL_UID}
       - MAIL_GID=${MAIL_GID}
+      - CERT_MODE=${CERT_MODE}
     restart: unless-stopped
     depends_on:
       - getmail
@@ -29,6 +30,21 @@ services:
       - TZ=${TZ}
       - MAIL_UID=${MAIL_UID}
       - MAIL_GID=${MAIL_GID}
+    restart: unless-stopped
+
+  certbot:
+    build: ./certbot
+    profiles:
+      - vps
+    ports:
+      - "80:80"
+    environment:
+      - FQDN=${FQDN}
+      - CERTBOT_EMAIL=${CERTBOT_EMAIL}
+      - CERTBOT_STAGING=${CERTBOT_STAGING}
+      - CERTBOT_RENEW_INTERVAL=${CERTBOT_RENEW_INTERVAL}
+    volumes:
+      - ${CERTS_HOST_PATH}:/etc/letsencrypt
     restart: unless-stopped
 
 volumes:

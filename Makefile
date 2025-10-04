@@ -3,6 +3,8 @@ include .env
 export $(shell sed -n 's/^\([A-Za-z_][A-Za-z0-9_]*\)=.*/\1/p' .env)
 endif
 
+COMPOSE_PROFILES ?=
+
 .PHONY: init build up down logs
 
 init:
@@ -11,13 +13,13 @@ init:
 	mkdir -p certs/live/$(FQDN)
 
 build:
-	docker compose build
+	COMPOSE_PROFILES=$(COMPOSE_PROFILES) docker compose build
 
 up:
-	docker compose up -d
+	COMPOSE_PROFILES=$(COMPOSE_PROFILES) docker compose up -d
 
 down:
-	docker compose down
+	COMPOSE_PROFILES=$(COMPOSE_PROFILES) docker compose down
 
 logs:
-	docker compose logs -f
+	COMPOSE_PROFILES=$(COMPOSE_PROFILES) docker compose logs -f
