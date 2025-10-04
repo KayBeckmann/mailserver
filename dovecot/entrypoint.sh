@@ -17,7 +17,7 @@ WAIT_INTERVAL="${CERT_WAIT_INTERVAL:-5}"
 CONFIG_SRC_DIR="/etc/dovecot"
 CONFIG_RUNTIME_DIR="/tmp/dovecot-config"
 AUTH_FILE_NAME="auth-passwdfile.conf.ext"
-BASE_DIR="/tmp/dovecot"
+BASE_DIR="/run/dovecot"
 
 prepare_self_signed() {
   mkdir -p "${CERT_DIR}"
@@ -49,6 +49,8 @@ prepare_config() {
 
   sed -i "s|@FQDN@|${FQDN}|g" "${CONFIG_RUNTIME_DIR}/dovecot.conf"
   mkdir -p "${BASE_DIR}"
+  chown root:root "${BASE_DIR}" || true
+  chmod 755 "${BASE_DIR}" || true
 
   AUTH_FILE_PRIMARY="${CONFIG_RUNTIME_DIR}/${AUTH_FILE_NAME}"
   AUTH_FILE_IN_CONF="${CONFIG_RUNTIME_DIR}/conf.d/${AUTH_FILE_NAME}"
