@@ -6,7 +6,7 @@
 - Benutzer und Passworthashes für Dovecot (`SHA512-CRYPT`)
 
 ## Ersteinrichtung
-1. `.env` anpassen (insbesondere `FQDN`, `MAIL_UID`, `MAIL_GID`).
+1. `.env` anpassen (insbesondere `FQDN`, `MAIL_UID`, `MAIL_GID`). Die Werte werden beim Start automatisch in die Dovecot-Konfiguration übernommen – keine manuellen Änderungen in `dovecot/conf/` nötig.
    - `CERT_MODE=home`: Self-Signed-Zertifikate werden beim Start des Dovecot-Containers automatisch erzeugt.
    - `CERT_MODE=vps`: Dovecot erwartet gültige Zertifikate unter `${CERTS_HOST_PATH}/live/${FQDN}/`.
    - `CERTBOT_EMAIL`, `CERTBOT_STAGING`, `CERTBOT_RENEW_INTERVAL` sind relevant, falls der Certbot-Container genutzt wird.
