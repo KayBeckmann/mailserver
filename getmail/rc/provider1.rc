@@ -1,0 +1,19 @@
+# Beispielkonfiguration für einen generischen POP3S-Provider.
+[retriever]
+type = SimplePOP3SSLRetriever
+server = pop3.example.com
+username = user@example.com
+password = CHANGE_ME
+port = 995
+
+[destination]
+type = Maildir
+path = /mail/Maildir/.Provider1/
+# Alternative für Sammel-Inbox:
+# path = /mail/Maildir/
+
+[options]
+delete = false
+read_all = false
+received = true
+delivered_to = true

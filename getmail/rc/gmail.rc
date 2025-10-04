@@ -1,0 +1,19 @@
+# Gmail erfordert 2FA und ein App-Passwort für POP3S.
+[retriever]
+type = SimplePOP3SSLRetriever
+server = pop.gmail.com
+username = dein@gmail.com
+password = CHANGE_ME
+port = 995
+
+[destination]
+type = Maildir
+path = /mail/Maildir/.Gmail/
+# Alternative für Sammel-Inbox:
+# path = /mail/Maildir/
+
+[options]
+delete = false
+read_all = false
+received = true
+delivered_to = true

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  dovecot:
+    build: ./dovecot
+    ports:
+      - "993:993"
+    volumes:
+      - maildata:/mail
+      - ./dovecot/conf:/etc/dovecot:ro
+      - ${CERTS_HOST_PATH}:/certs:ro
+    environment:
+      - TZ=${TZ}
+      - FQDN=${FQDN}
+      - MAIL_UID=${MAIL_UID}
+      - MAIL_GID=${MAIL_GID}
+    restart: unless-stopped
+    depends_on:
+      - getmail
+
+  getmail:
+    build: ./getmail
+    command: ["/usr/local/bin/runner.sh"]
+    volumes:
+      - maildata:/mail
+      - ./getmail/rc:/getmail/rc:ro
+      - ./getmail/state:/getmail/state
+    environment:
+      - TZ=${TZ}
+      - MAIL_UID=${MAIL_UID}
+      - MAIL_GID=${MAIL_GID}
+    restart: unless-stopped
+
+volumes:
+  maildata:

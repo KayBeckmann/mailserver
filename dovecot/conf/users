@@ -1,0 +1,2 @@
+# Benutzername:Passworthash (SHA512-CRYPT). Hash mit `doveadm pw -s SHA512-CRYPT` erzeugen.
+kay:{SHA512-CRYPT}<HASH>

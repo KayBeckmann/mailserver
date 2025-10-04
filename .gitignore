@@ -1,0 +1,4 @@
+certs/
+getmail/state/
+**/.DS_Store
+**/Thumbs.db

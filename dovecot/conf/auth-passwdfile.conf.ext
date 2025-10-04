@@ -1,0 +1,9 @@
+passdb {
+  driver = passwd-file
+  args = scheme=SHA512-CRYPT /etc/dovecot/users
+}
+
+userdb {
+  driver = static
+  args = uid=${MAIL_UID} gid=${MAIL_GID} home=/mail
+}
