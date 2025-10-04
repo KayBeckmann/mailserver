@@ -18,6 +18,7 @@ CONFIG_SRC_DIR="/etc/dovecot"
 CONFIG_RUNTIME_DIR="/tmp/dovecot-config"
 AUTH_FILE_NAME="auth-passwdfile.conf.ext"
 BASE_DIR="/run/dovecot"
+MAIL_ROOT="/mail"
 
 prepare_self_signed() {
   mkdir -p "${CERT_DIR}"
@@ -70,11 +71,18 @@ prepare_config() {
   fi
 }
 
+ensure_maildir() {
+  mkdir -p "${MAIL_ROOT}/Maildir"
+  chown -R "${MAIL_UID}:${MAIL_GID}" "${MAIL_ROOT}"
+}
+
 if [ "${CERT_MODE}" = "home" ]; then
   prepare_self_signed
 else
   wait_for_external_cert
 fi
+
+ensure_maildir
 
 prepare_config
 
