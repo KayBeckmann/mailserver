@@ -16,6 +16,7 @@ CERT_FILE="${CERT_DIR}/fullchain.pem"
 WAIT_INTERVAL="${CERT_WAIT_INTERVAL:-5}"
 CONFIG_SRC_DIR="/etc/dovecot"
 CONFIG_RUNTIME_DIR="/tmp/dovecot-config"
+AUTH_FILE_NAME="auth-passwdfile.conf.ext"
 
 prepare_self_signed() {
   mkdir -p "${CERT_DIR}"
@@ -46,8 +47,23 @@ prepare_config() {
   cp -r "${CONFIG_SRC_DIR}" "${CONFIG_RUNTIME_DIR}"
 
   sed -i "s|@FQDN@|${FQDN}|g" "${CONFIG_RUNTIME_DIR}/dovecot.conf"
-  sed -i "s|@MAIL_UID@|${MAIL_UID}|g" "${CONFIG_RUNTIME_DIR}/auth-passwdfile.conf.ext"
-  sed -i "s|@MAIL_GID@|${MAIL_GID}|g" "${CONFIG_RUNTIME_DIR}/auth-passwdfile.conf.ext"
+
+  AUTH_FILE_PRIMARY="${CONFIG_RUNTIME_DIR}/${AUTH_FILE_NAME}"
+  AUTH_FILE_IN_CONF="${CONFIG_RUNTIME_DIR}/conf.d/${AUTH_FILE_NAME}"
+
+  if [ -f "${AUTH_FILE_PRIMARY}" ]; then
+    sed -i "s|@MAIL_UID@|${MAIL_UID}|g" "${AUTH_FILE_PRIMARY}"
+    sed -i "s|@MAIL_GID@|${MAIL_GID}|g" "${AUTH_FILE_PRIMARY}"
+  fi
+
+  if [ -f "${AUTH_FILE_IN_CONF}" ]; then
+    sed -i "s|@MAIL_UID@|${MAIL_UID}|g" "${AUTH_FILE_IN_CONF}"
+    sed -i "s|@MAIL_GID@|${MAIL_GID}|g" "${AUTH_FILE_IN_CONF}"
+  fi
+
+  if [ -f "${AUTH_FILE_PRIMARY}" ] && [ ! -f "${AUTH_FILE_IN_CONF}" ]; then
+    cp "${AUTH_FILE_PRIMARY}" "${AUTH_FILE_IN_CONF}"
+  fi
 }
 
 if [ "${CERT_MODE}" = "home" ]; then
