@@ -11,6 +11,9 @@ RUN groupadd --gid 1000 mailhub \
 
 RUN setcap 'cap_net_bind_service=+ep' /usr/sbin/dovecot
 
+RUN mkdir -p /run/dovecot \
+    && chown 1000:1000 /run/dovecot
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
